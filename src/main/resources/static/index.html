@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Zomato — Premium Food Delivery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+
+  <!-- AUTHENTICATION PAGE -->
+  <div id="auth-page" class="auth-page">
+    <div class="auth-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+    </div>
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div style="font-size:42px; margin-bottom:10px;">🍕</div>
+        <h1>Zomato</h1>
+        <p>Premium Food Delivery Service</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuth('login')">Sign In</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuth('register')">Register</button>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="login-form" onsubmit="doLogin(event)">
+        <div id="lerr" class="msg-error"></div>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">👤</span>
+            <input class="form-input" id="lu" placeholder="Enter your username" autocomplete="username" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">🔒</span>
+            <input class="form-input" type="password" id="lp" placeholder="Enter your password" autocomplete="current-password" required/>
+            <button type="button" class="eye-btn" onclick="togglePwd('lp',this)">👁️</button>
+          </div>
+        </div>
+        <button class="btn-primary-full" type="submit">
+          <span>Sign In</span>
+          <span>→</span>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" style="display:none" onsubmit="doRegister(event)">
+        <div id="rerr" class="msg-error"></div>
+        <div id="rok" class="msg-success"></div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">✨</span>
+            <input class="form-input" id="rname" placeholder="Enter your full name" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">👤</span>
+            <input class="form-input" id="ru" placeholder="Choose a username" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">📧</span>
+            <input class="form-input" type="email" id="remail" placeholder="Enter your email" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">🔒</span>
+            <input class="form-input" type="password" id="rp" placeholder="Create a password" required/>
+            <button type="button" class="eye-btn" onclick="togglePwd('rp',this)">👁️</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">🔒</span>
+            <input class="form-input" type="password" id="rp2" placeholder="Confirm your password" required/>
+            <button type="button" class="eye-btn" onclick="togglePwd('rp2',this)">👁️</button>
+          </div>
+        </div>
+        <button class="btn-primary-full" type="submit">
+          <span>Register</span>
+          <span>→</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- APPLICATION CONTAINER -->
+  <div id="app" style="display:none">
+    <nav class="nav">
+      <div class="nav-logo" onclick="goHome()">ZOMATO<span>.</span></div>
+      <div class="nav-loc" onclick="goHome()">📍 Bengaluru, KA</div>
+      <div class="nav-right">
+        <button class="nav-btn" onclick="showScreen('profile')" title="Profile">👤</button>
+        <button class="nav-btn" onclick="showScreen('cart')" title="Cart">
+          🛒
+          <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- SCREEN: HOME -->
+    <div id="screen-home" class="screen active">
+      <div class="hero">
+        <h1>HUNGRY?<br>ORDER <span>NOW.</span></h1>
+        <p>Delicious food delivered straight to your door step</p>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search restaurants or cuisines..." oninput="filterRestaurants(this.value)"/>
+          <button onclick="filterRestaurants(document.getElementById('search-input').value)">🔍</button>
+        </div>
+      </div>
+      <div class="promo-banner">
+        <div class="promo-text">
+          <h3>50% OFF up to ₹100</h3>
+          <p>Use code FIRST50 on your first order</p>
+        </div>
+        <div class="promo-emoji">🍕</div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">What's on your mind?</div>
+        <div class="cats" id="categories">
+          <div class="cat active" onclick="filterCat(this,'All')"><div class="cat-icon">🍽️</div><div class="cat-label">All</div></div>
+          <div class="cat" onclick="filterCat(this,'Biryani')"><div class="cat-icon">🍛</div><div class="cat-label">Biryani</div></div>
+          <div class="cat" onclick="filterCat(this,'Pizza')"><div class="cat-icon">🍕</div><div class="cat-label">Pizza</div></div>
+          <div class="cat" onclick="filterCat(this,'Burger')"><div class="cat-icon">🍔</div><div class="cat-label">Burger</div></div>
+          <div class="cat" onclick="filterCat(this,'Sushi')"><div class="cat-icon">🍱</div><div class="cat-label">Sushi</div></div>
+          <div class="cat" onclick="filterCat(this,'Desserts')"><div class="cat-icon">🍰</div><div class="cat-label">Desserts</div></div>
+          <div class="cat" onclick="filterCat(this,'Chinese')"><div class="cat-icon">🥡</div><div class="cat-label">Chinese</div></div>
+          <div class="cat" onclick="filterCat(this,'South Indian')"><div class="cat-icon">🥘</div><div class="cat-label">South Indian</div></div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-title" id="rest-title">Top Restaurants Near You</div>
+      </div>
+      <div class="restaurants" id="restaurant-list"></div>
+    </div>
+
+    <!-- SCREEN: RESTAURANT DETAIL -->
+    <div id="screen-restaurant" class="screen">
+      <div class="r-detail-header">
+        <div class="r-detail-cover" id="rest-cover">🍔</div>
+        <button class="back-btn" onclick="showScreen('home')">←</button>
+      </div>
+      <div class="r-detail-info">
+        <h2 id="rest-detail-name">Restaurant Name</h2>
+        <div style="font-size:13px; color:var(--text-muted); margin-top:4px;" id="rest-detail-tags">Tags</div>
+        <div class="r-detail-stats">
+          <div class="stat"><div class="stat-val green" id="rest-detail-rating">4.5★</div><div class="stat-lab">Rating</div></div>
+          <div class="stat"><div class="stat-val" id="rest-detail-time">25 mins</div><div class="stat-lab">Delivery Time</div></div>
+          <div class="stat"><div class="stat-val" id="rest-detail-delivery-fee">₹30</div><div class="stat-lab">Delivery Fee</div></div>
+        </div>
+      </div>
+      <div class="menu-section" id="menu-list"></div>
+      
+      <!-- FLOATING CART BAR -->
+      <div class="floating-cart" id="floating-cart-bar" style="display:none" onclick="showScreen('cart')">
+        <div class="fc-left">
+          <span id="fc-count">1</span> item from <span id="fc-rest">Restaurant</span> added
+        </div>
+        <div class="fc-right">
+          View Cart · ₹<span id="fc-total">0</span> 🛒
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: CART -->
+    <div id="screen-cart" class="screen">
+      <div class="screen-title">Shopping Cart</div>
+      <div class="cart-screen" id="cart-content"></div>
+    </div>
+
+    <!-- SCREEN: ORDER TRACKING -->
+    <div id="screen-tracking" class="screen">
+      <div class="screen-title">Track Your Order</div>
+      <div class="tracking">
+        <div class="order-id" id="order-id">Order #ZMT-123456</div>
+        <div class="delivery-map">
+          <div class="map-emoji">🛵</div>
+          <div class="map-text">Your rider is moving towards your location...</div>
+        </div>
+        <div class="track-steps" id="track-steps"></div>
+        
+        <div class="rider-card">
+          <div class="rider-avatar">👨</div>
+          <div>
+            <div class="rider-name">Ramesh Kumar</div>
+            <div class="rider-sub">Your Delivery Partner</div>
+          </div>
+          <button class="call-btn" onclick="toast('Calling delivery partner...')">📞</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: PROFILE -->
+    <div id="screen-profile" class="screen">
+      <div class="screen-title">My Profile</div>
+      <div class="profile-screen">
+        <div class="profile-card" id="profile-card">
+          <div class="profile-avatar" id="prof-avatar">S</div>
+          <h3 class="profile-name" id="prof-name">Sahana Kulkarni</h3>
+          <div class="profile-email" id="prof-email">sahana@zomato.com</div>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary" onclick="doLogout()">Logout</button>
+          </div>
+        </div>
+        
+        <div class="past-orders-title">🕓 Order History</div>
+        <div class="order-history-list" id="order-history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
