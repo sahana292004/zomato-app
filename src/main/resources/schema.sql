@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════
---  Zomato Database Schema (MySQL)
+--  Zomato Database Schema (H2 Compatible)
 -- ═══════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS users (
@@ -8,11 +8,11 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('customer', 'admin') DEFAULT 'customer',
-    joined DATE DEFAULT (CURRENT_DATE),
-    UNIQUE KEY uk_username (username),
-    UNIQUE KEY uk_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    role VARCHAR(20) DEFAULT 'customer',
+    joined DATE DEFAULT CURRENT_DATE,
+    CONSTRAINT uk_username UNIQUE (username),
+    CONSTRAINT uk_email UNIQUE (email)
+);
 
 CREATE TABLE IF NOT EXISTS restaurants (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS restaurants (
     tags VARCHAR(255) NOT NULL,
     emoji VARCHAR(10) NOT NULL,
     category VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 CREATE TABLE IF NOT EXISTS menu_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS menu_items (
     emoji VARCHAR(10) NOT NULL,
     category VARCHAR(50) NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS orders (
     total INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 CREATE TABLE IF NOT EXISTS order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,4 +57,4 @@ CREATE TABLE IF NOT EXISTS order_items (
     price INT NOT NULL,
     quantity INT NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
