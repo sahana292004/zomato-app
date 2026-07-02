@@ -9,3 +9,4 @@ target/
 *.tmp
 *.bak
 .DS_Store
+.vercel
